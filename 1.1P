@@ -1,0 +1,35 @@
+// C++ code
+
+//Declaring variables
+int PinSensor = 2;
+int PinLED = 12;
+int PirSensor = 0;
+
+void setup()
+{
+  //Declaring inputs and outputs
+  pinMode(PinSensor, INPUT);
+  pinMode(PinLED, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop()
+{
+  //Read the values from the PIRSENSOR
+  PirSensor = digitalRead(PinSensor);
+  
+  //If motion is detected
+  if (PirSensor == HIGH)
+  {
+    digitalWrite(PinLED, HIGH);
+    Serial.println("Motion Detected");
+    delay(500);
+  }
+  else  //If motion is not detected
+  {    
+    digitalWrite(PinLED, LOW);
+    Serial.println("No motion detected");
+    delay(500);
+  } 
+	
+}

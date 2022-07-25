@@ -1,0 +1,34 @@
+// C++ code
+
+//Declaring variables
+int PinSensor = 2;
+int PinLED = 12;
+volatile boolean ledOn = false;
+
+void setup()
+{
+  pinMode(PinSensor, INPUT);
+  pinMode(PinLED, OUTPUT);
+  attachInterrupt(digitalPinToInterrupt(PinSensor),motionDetected, CHANGE);
+  Serial.begin(9600);
+}
+
+void loop()
+{
+}
+
+void motionDetected()
+{
+  if(ledOn)
+  {
+    ledOn = false;
+    digitalWrite(PinLED, LOW);
+    Serial.println("0");
+  }
+  else
+  {
+    ledOn = true;
+    digitalWrite(PinLED, HIGH);
+    Serial.println("1");
+  }
+}

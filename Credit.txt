@@ -1,0 +1,56 @@
+// C++ code
+//Declaring variables
+int PinSensor = 2;
+int PinLED = 12;
+int PinBlue = 13;
+int button = 3;
+volatile boolean ledOn = false;
+volatile boolean buttonPressed = false;
+
+void setup()
+{
+  pinMode(PinSensor, INPUT_PULLUP);
+  pinMode(PinLED, OUTPUT);
+  pinMode(PinBlue, OUTPUT);
+  pinMode(button ,INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(PinSensor),motionDetected, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(button), ButtonPress,CHANGE);
+  Serial.begin(9600);
+}
+
+void loop()
+{
+}
+
+void motionDetected()
+{
+  if(ledOn)
+  {
+    ledOn = false;
+    digitalWrite(PinLED, LOW);
+    Serial.println("0");
+  }
+  else
+  {
+    ledOn = true;
+    digitalWrite(PinLED, HIGH);
+    Serial.println("1");
+  }
+}
+
+void ButtonPress()
+{
+  
+  if(buttonPressed)
+  {
+    buttonPressed = false;
+    digitalWrite(PinBlue, LOW);
+    Serial.println("NO MOTION");
+  }
+  else
+  {
+    buttonPressed = true;
+    digitalWrite(PinBlue, HIGH);
+    Serial.println("MOTION");
+  }
+}

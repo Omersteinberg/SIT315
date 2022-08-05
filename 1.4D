@@ -1,0 +1,70 @@
+// C++ code
+//Declaring variables
+int PinSensor = 7;
+int PinLED = 12;
+int PinBlue = 13;
+int PinGreen = 11;
+int button = 3;
+int button2 = 2;
+int timerLED = 6;
+
+void setup()
+{
+  pinMode(PinSensor, INPUT_PULLUP);
+  pinMode(PinLED, OUTPUT);
+  pinMode(button ,INPUT_PULLUP);
+  pinMode(button2, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(button2),ButttonPress1, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(button), ButtonPress,CHANGE);
+  Serial.begin(9600);
+  
+  PCICR |= 0b00000100; 
+  PCMSK2 |= 0b00100000; 
+  
+  
+  cli();
+  TCCR1A = 0;
+  TCCR1B = 0;
+  TCNT1 = 0;
+  
+  OCR1A = 31249;
+  
+  TCCR1B |= (1<<CS12) | (1<<CS10);
+  
+  TIMSK1 |= (1<<OCIE1A);
+  
+  TCCR1B |= (1<< WGM12);
+  sei();
+}
+
+void loop()
+{
+  if(digitalRead(PinSensor) == HIGH)
+  {
+    Serial.println("1");
+    digitalWrite(PinLED, HIGH);
+    delay(100);
+    digitalWrite(PinLED, LOW);
+  }
+}
+
+void ButttonPress1()
+{
+  Serial.println("MOTION IN BUTTON 1");
+  digitalWrite(PinBlue, !digitalRead(PinBlue));
+}
+
+
+void ButtonPress()
+
+  Serial.println("MOTION IN BUTTON 2");
+  digitalWrite(PinGreen, !digitalRead(PinGreen));
+}
+
+
+ISR(TIMER1_COMPA_vect)
+{
+  Serial.println("Timer Interrupt ON");
+  digitalWrite(timerLED, !digitalRead(timerLED));
+}
+  
